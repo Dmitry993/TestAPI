@@ -7,10 +7,19 @@ namespace TestAPI.Context
     {
         public ApplicationContext(DbContextOptions options) : base(options)
         {
-            Database.EnsureCreated();
         }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Role>().HasData(
+                new { Id = 1, RoleName = "User"},
+                new { Id = 2, RoleName = "Admin"},
+                new { Id = 3, RoleName = "Support"},
+                new { Id = 4, RoleName = "SuperAdmin"}
+                );
+        }
     }
 }
