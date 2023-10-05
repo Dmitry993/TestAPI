@@ -22,6 +22,16 @@ namespace TestAPI.Repositories
             _mapper = mapper;
         }
 
+        public async Task<UserDTO> CreateUser(CreateUserDTO userDto)
+        {
+            var user = _mapper.Map<User>(userDto);
+            user.Roles.Add(new Role { RoleName = "User" });
+            await _context.AddAsync(user);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<UserDTO>(user);
+        }
+
         public async Task DeleteUser(int id)
         {
             var user = _context.Users.Attach(new User { Id = id });
@@ -56,10 +66,11 @@ namespace TestAPI.Repositories
         public async Task<UserDTO> UpdateUser(UpdateUserDTO userDto)
         {
             var userDb = await _context.Users.FindAsync(userDto.Id);
+            var user = _mapper.Map<User>(userDto);
 
             if (userDb is not null) 
             {
-                _context.Entry(userDb).CurrentValues.SetValues(userDto);
+                _context.Entry(userDb).CurrentValues.SetValues(user);
                 await _context.SaveChangesAsync();
                 return _mapper.Map<UserDTO>(userDb);
             }

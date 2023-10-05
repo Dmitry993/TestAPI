@@ -9,6 +9,8 @@ namespace TestAPI.Profiles
         public UserProfile()
         {
             CreateMap<User, UserDTO>();
+            CreateMap<UpdateUserDTO, User>();
+            CreateMap<CreateUserDTO, User>();
         }
     }
 }
