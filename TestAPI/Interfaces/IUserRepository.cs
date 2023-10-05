@@ -9,7 +9,7 @@ namespace TestAPI.Interfaces
     {
         Task<UserDTO> GetUserById(int id);
         Task<UserDTO> UpdateUser(UpdateUserDTO user);
-        Task<PaginatedResult<User>> GetUserPage(RequestParameters parameters);
+        Task<PaginatedResult<UserDTO>> GetUserPage(RequestParameters parameters);
         Task DeleteUser(int id);
     }
 }

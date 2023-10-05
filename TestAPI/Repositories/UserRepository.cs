@@ -2,10 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using TestAPI.Context;
 using TestAPI.DTOs;
+using TestAPI.Extensions;
 using TestAPI.Interfaces;
 using TestAPI.Models;
 using TestAPI.Shared;
 using TestAPI.Shared.Parameters;
+using System.Linq.Dynamic.Core;
 
 namespace TestAPI.Repositories
 {
@@ -29,13 +31,26 @@ namespace TestAPI.Repositories
 
         public async Task<UserDTO> GetUserById(int id)
         {
-            var user = await _context.Users.SingleOrDefaultAsync(x => x.Id == id);
+            var user = await _context.Users.Include(user => user.Roles)
+                                           .SingleOrDefaultAsync(x => x.Id == id);
             return _mapper.Map<UserDTO>(user);
         }
 
-        public Task<PaginatedResult<User>> GetUserPage(RequestParameters parameters)
+        public async Task<PaginatedResult<UserDTO>> GetUserPage(RequestParameters parameters)
         {
-            throw new NotImplementedException();
+            var totalItems = _context.Users.Count();
+            var userPage = await _context.Users.Include(user => user.Roles)
+                                          .Sort(parameters.SearchTerm, parameters.PropertyName, parameters.EntityName)
+                                          .OrderBy(parameters.OrderBy)
+                                          .ToUserPageListAsync(parameters.CurrentPage, parameters.PageSize);
+
+            return new PaginatedResult<UserDTO>
+            {
+                Items = _mapper.Map<List<UserDTO>>(userPage),
+                TotalItems = totalItems,
+                CurrentPage = parameters.CurrentPage,
+                PageSize = parameters.PageSize
+            };
         }
 
         public async Task<UserDTO> UpdateUser(UpdateUserDTO userDto)
