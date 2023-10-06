@@ -17,7 +17,7 @@ namespace TestAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUserPage(RequestParameters parameters)
+        public async Task<IActionResult> GetUserPage([FromQuery]RequestParameters parameters)
         {
             return Ok(await _repository.GetUserPage(parameters));
         }

@@ -20,6 +20,5 @@
         public string OrderBy { get; set; } = "Name ASC";
         public string SearchTerm { get; set; } = string.Empty;
         public string PropertyName { get; set; } = "Name";
-        public string EntityName { get; set; } = "User";
     }
 }

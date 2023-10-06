@@ -25,7 +25,7 @@ namespace TestAPI.Repositories
         public async Task<UserDTO> CreateUser(CreateUserDTO userDto)
         {
             var user = _mapper.Map<User>(userDto);
-            user.Roles.Add(new Role { RoleName = "User" });
+            user.Roles = new List<Role>() { new Role { RoleName = "User" } };
             await _context.AddAsync(user);
             await _context.SaveChangesAsync();
 
@@ -48,16 +48,15 @@ namespace TestAPI.Repositories
 
         public async Task<PaginatedResult<UserDTO>> GetUserPage(RequestParameters parameters)
         {
-            var totalItems = _context.Users.Count();
             var userPage = await _context.Users.Include(user => user.Roles)
-                                          .Sort(parameters.SearchTerm, parameters.PropertyName, parameters.EntityName)
+                                          .Filter(parameters.SearchTerm, parameters.PropertyName)
                                           .OrderBy(parameters.OrderBy)
                                           .ToUserPageListAsync(parameters.CurrentPage, parameters.PageSize);
 
             return new PaginatedResult<UserDTO>
             {
                 Items = _mapper.Map<List<UserDTO>>(userPage),
-                TotalItems = totalItems,
+                TotalItems = userPage.Count(),
                 CurrentPage = parameters.CurrentPage,
                 PageSize = parameters.PageSize
             };
