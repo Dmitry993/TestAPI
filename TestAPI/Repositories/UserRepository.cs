@@ -48,15 +48,17 @@ namespace TestAPI.Repositories
 
         public async Task<PaginatedResult<UserDTO>> GetUserPage(RequestParameters parameters)
         {
-            var userPage = await _context.Users.Include(user => user.Roles)
+            var filteredData = _context.Users.Include(user => user.Roles)
                                                .Filter(parameters.SearchTerm, parameters.PropertyName)
-                                               .OrderBy(parameters.OrderBy)
-                                               .ToUserPageListAsync(parameters.CurrentPage, parameters.PageSize);
+                                               .OrderBy(parameters.OrderBy);
+
+            var totalItems = filteredData.Count();
+            var userPage = await filteredData.ToUserPageListAsync(parameters.CurrentPage, parameters.PageSize);
 
             return new PaginatedResult<UserDTO>
             {
                 Items = _mapper.Map<List<UserDTO>>(userPage),
-                TotalItems = userPage.Count(),
+                TotalItems = totalItems,
                 CurrentPage = parameters.CurrentPage,
                 PageSize = parameters.PageSize
             };
