@@ -9,6 +9,7 @@ namespace TestAPI.Profiles
         public RoleProfile()
         {
             CreateMap<Role, RoleDTO>().ReverseMap();
+            CreateMap<AddRoleDTO, Role>();
         }
     }
 }

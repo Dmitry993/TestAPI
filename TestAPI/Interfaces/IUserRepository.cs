@@ -12,5 +12,6 @@ namespace TestAPI.Interfaces
         Task<UserDTO> UpdateUser(UpdateUserDTO user);
         Task<PaginatedResult<UserDTO>> GetUserPage(RequestParameters parameters);
         Task DeleteUser(int id);
+        Task<bool> IsUserExist(int userId);
     }
 }

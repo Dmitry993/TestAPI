@@ -49,9 +49,9 @@ namespace TestAPI.Repositories
         public async Task<PaginatedResult<UserDTO>> GetUserPage(RequestParameters parameters)
         {
             var userPage = await _context.Users.Include(user => user.Roles)
-                                          .Filter(parameters.SearchTerm, parameters.PropertyName)
-                                          .OrderBy(parameters.OrderBy)
-                                          .ToUserPageListAsync(parameters.CurrentPage, parameters.PageSize);
+                                               .Filter(parameters.SearchTerm, parameters.PropertyName)
+                                               .OrderBy(parameters.OrderBy)
+                                               .ToUserPageListAsync(parameters.CurrentPage, parameters.PageSize);
 
             return new PaginatedResult<UserDTO>
             {
@@ -60,6 +60,11 @@ namespace TestAPI.Repositories
                 CurrentPage = parameters.CurrentPage,
                 PageSize = parameters.PageSize
             };
+        }
+
+        public async Task<bool> IsUserExist(int userId)
+        {
+            return await _context.Users.AnyAsync(user => user.Id == userId);
         }
 
         public async Task<UserDTO> UpdateUser(UpdateUserDTO userDto)

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TestAPI.DTOs;
 using TestAPI.Interfaces;
+using TestAPI.Shared.Enums;
 using TestAPI.Shared.Parameters;
 
 namespace TestAPI.Controllers
@@ -9,35 +10,54 @@ namespace TestAPI.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserRepository _repository;
+        private readonly IUserRepository _userRepository;
+        private readonly IRoleRepository _roleRepository;
 
-        public UserController(IUserRepository repository)
+        public UserController(IUserRepository repository, IRoleRepository roleRepository)
         {
-            _repository = repository;
+            _userRepository = repository;
+            _roleRepository = roleRepository;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetUserPage([FromQuery]RequestParameters parameters)
         {
-            return Ok(await _repository.GetUserPage(parameters));
+            return Ok(await _userRepository.GetUserPage(parameters));
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(int id)
         {
-            return Ok(await _repository.GetUserById(id));
+            return Ok(await _userRepository.GetUserById(id));
         }
 
-        [HttpPost]
+        [HttpPost("CreateUser")]
         public async Task<IActionResult> CreateUser(CreateUserDTO userDto)
         {
-            return Ok(await _repository.CreateUser(userDto));
+            return Ok(await _userRepository.CreateUser(userDto));
+        }
+
+        [HttpPost("AddUserRole")]
+        public async Task<IActionResult> AddUserRole(AddRoleDTO roleDto)
+        {
+            var isUserExist = await _userRepository.IsUserExist(roleDto.UserId);
+
+            if (!isUserExist)
+            {
+                return NotFound("User does not exist");
+            }
+            if (!Enum.IsDefined(typeof(RoleEnum), roleDto.RoleName))
+            {
+                return BadRequest("Incorrect role");
+            }
+
+            return Ok(await _roleRepository.AddRoleToUser(roleDto));
         }
 
         [HttpDelete("{id}")]
         public async Task Delete(int id)
         {
-            await _repository.DeleteUser(id);
+            await _userRepository.DeleteUser(id);
         }
     }
 }
