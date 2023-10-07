@@ -13,5 +13,6 @@ namespace TestAPI.Interfaces
         Task<PaginatedResult<UserDTO>> GetUserPage(RequestParameters parameters);
         Task DeleteUser(int id);
         Task<bool> IsUserExist(int userId);
+        Task<bool> IsLoginPasswordCorrect(LoginDTO login);
     }
 }

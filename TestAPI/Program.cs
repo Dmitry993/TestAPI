@@ -4,15 +4,18 @@ using AutoMapper;
 using TestAPI.Interfaces;
 using TestAPI.Repositories;
 using Microsoft.OpenApi.Models;
+using TestAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var configuration = builder.Configuration;
+var connectionString = configuration.GetConnectionString("DefaultConnection");
 
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddSwaggerGen(options => options.SwaggerDoc("v1", new OpenApiInfo { Title = "Test API", Version = "v1" }));
+builder.Services.AddSwagger();
 builder.Services.AddControllers();
+builder.Services.AddJWTAuthentication(configuration);
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();

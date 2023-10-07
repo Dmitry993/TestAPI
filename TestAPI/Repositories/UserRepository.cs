@@ -64,10 +64,10 @@ namespace TestAPI.Repositories
             };
         }
 
-        public async Task<bool> IsUserExist(int userId)
-        {
-            return await _context.Users.AnyAsync(user => user.Id == userId);
-        }
+        public async Task<bool> IsLoginPasswordCorrect(LoginDTO login) => 
+            await _context.Users.AnyAsync(user => user.Name == login.Username && user.Password == login.Password);
+
+        public async Task<bool> IsUserExist(int userId) => await _context.Users.AnyAsync(user => user.Id == userId);
 
         public async Task<UserDTO> UpdateUser(UpdateUserDTO userDto)
         {
