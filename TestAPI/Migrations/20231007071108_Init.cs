@@ -35,7 +35,7 @@ namespace TestAPI.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     RoleName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: true)
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -44,18 +44,24 @@ namespace TestAPI.Migrations
                         name: "FK_Roles_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Age", "Email", "Name", "Password" },
+                values: new object[] { 1, 20, "Admin@mail.ru", "Admin", "123456" });
 
             migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "Id", "RoleName", "UserId" },
                 values: new object[,]
                 {
-                    { 1, "User", null },
-                    { 2, "Admin", null },
-                    { 3, "Support", null },
-                    { 4, "SuperAdmin", null }
+                    { 1, "User", 1 },
+                    { 2, "Admin", 1 },
+                    { 3, "Support", 1 },
+                    { 4, "SuperAdmin", 1 }
                 });
 
             migrationBuilder.CreateIndex(

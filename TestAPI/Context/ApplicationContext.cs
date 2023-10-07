@@ -14,12 +14,22 @@ namespace TestAPI.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = 1,
+                    Name = "Admin",
+                    Age = 20,
+                    Email = "Admin@mail.ru",
+                    Password = "123456",
+                });
+
             modelBuilder.Entity<Role>().HasData(
-                new { Id = 1, RoleName = "User"},
-                new { Id = 2, RoleName = "Admin"},
-                new { Id = 3, RoleName = "Support"},
-                new { Id = 4, RoleName = "SuperAdmin"}
-                );
+                new Role { Id = 1, RoleName = "User" , UserId = 1},
+                new Role { Id = 2, RoleName = "Admin" , UserId = 1 },
+                new Role { Id = 3, RoleName = "Support" , UserId = 1 },
+                new Role { Id = 4, RoleName = "SuperAdmin", UserId = 1 }
+                );    
         }
     }
 }
