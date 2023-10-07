@@ -11,6 +11,9 @@ namespace TestAPI.Profiles
             CreateMap<User, UserDTO>();
             CreateMap<UpdateUserDTO, User>();
             CreateMap<CreateUserDTO, User>();
+            CreateMap<CreateUserDTO, UserDTO>();
+            CreateMap<UpdateUserDTO, UserDTO>();
+
         }
     }
 }

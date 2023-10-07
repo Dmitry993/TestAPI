@@ -70,10 +70,10 @@ namespace TestAPI.Repositories
         public async Task<UserDTO> UpdateUser(UpdateUserDTO userDto)
         {
             var userDb = await _context.Users.FindAsync(userDto.Id);
-            var user = _mapper.Map<User>(userDto);
-
+            
             if (userDb is not null) 
             {
+                var user = _mapper.Map<User>(userDto);
                 _context.Entry(userDb).CurrentValues.SetValues(user);
                 await _context.SaveChangesAsync();
                 return _mapper.Map<UserDTO>(userDb);
