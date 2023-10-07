@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TestAPI.DTOs;
 using TestAPI.Interfaces;
 using TestAPI.Shared.Enums;
@@ -55,9 +56,18 @@ namespace TestAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            await _userRepository.DeleteUser(id);
+            try
+            {
+                await _userRepository.DeleteUser(id);
+                return Ok();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return NotFound("User does not exist");
+            }
+            
         }
     }
 }
