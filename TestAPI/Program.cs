@@ -1,14 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 using TestAPI.Context;
-using AutoMapper;
 using TestAPI.Interfaces;
 using TestAPI.Repositories;
-using Microsoft.OpenApi.Models;
 using TestAPI.Extensions;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+builder.Host.UseSerilog((context, configuration) =>
+    configuration.ReadFrom.Configuration(context.Configuration));
 
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
@@ -24,6 +26,7 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
+app.UseSerilogRequestLogging();
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
