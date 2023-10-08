@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using TestAPI.DTOs;
 using TestAPI.Models;
+using TestAPI.Shared.DTOs;
 
 namespace TestAPI.Profiles
 {

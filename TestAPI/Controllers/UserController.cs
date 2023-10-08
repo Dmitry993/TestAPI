@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
-using TestAPI.DTOs;
 using TestAPI.Interfaces;
+using TestAPI.Shared.DTOs;
 using TestAPI.Shared.Enums;
 using TestAPI.Shared.Parameters;
 

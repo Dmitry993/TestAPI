@@ -1,6 +1,6 @@
-﻿using TestAPI.DTOs;
-using TestAPI.Models;
+﻿using TestAPI.Models;
 using TestAPI.Shared;
+using TestAPI.Shared.DTOs;
 using TestAPI.Shared.Parameters;
 
 namespace TestAPI.Interfaces

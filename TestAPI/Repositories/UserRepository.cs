@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TestAPI.Context;
-using TestAPI.DTOs;
 using TestAPI.Extensions;
 using TestAPI.Interfaces;
 using TestAPI.Models;
 using TestAPI.Shared;
 using TestAPI.Shared.Parameters;
 using System.Linq.Dynamic.Core;
+using TestAPI.Shared.DTOs;
 
 namespace TestAPI.Repositories
 {

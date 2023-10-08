@@ -1,4 +1,4 @@
-﻿using TestAPI.DTOs;
+﻿using TestAPI.Shared.DTOs;
 
 namespace TestAPI.Interfaces
 {

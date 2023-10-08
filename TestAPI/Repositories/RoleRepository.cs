@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TestAPI.Context;
-using TestAPI.DTOs;
 using TestAPI.Interfaces;
 using TestAPI.Models;
+using TestAPI.Shared.DTOs;
 
 namespace TestAPI.Repositories
 {

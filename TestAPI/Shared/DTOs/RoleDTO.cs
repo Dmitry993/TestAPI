@@ -1,4 +1,4 @@
-﻿namespace TestAPI.DTOs
+﻿namespace TestAPI.Shared.DTOs
 {
     public class RoleDTO
     {

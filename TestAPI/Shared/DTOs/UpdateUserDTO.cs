@@ -1,6 +1,4 @@
-﻿using TestAPI.Models;
-
-namespace TestAPI.DTOs
+﻿namespace TestAPI.Shared.DTOs
 {
     public class UpdateUserDTO
     {
