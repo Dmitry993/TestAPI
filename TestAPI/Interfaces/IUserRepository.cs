@@ -14,5 +14,6 @@ namespace TestAPI.Interfaces
         Task DeleteUser(int id);
         Task<bool> IsUserExist(int userId);
         Task<bool> IsLoginPasswordCorrect(LoginDTO login);
+        Task<bool> IsNotUniqueEmail(string email);
     }
 }

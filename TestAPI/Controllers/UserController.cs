@@ -10,7 +10,6 @@ using TestAPI.Shared.Parameters;
 
 namespace TestAPI.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -88,14 +87,14 @@ namespace TestAPI.Controllers
         ///     {        
         ///       "name": "Mike",
         ///       "password": "123456",
-        ///       "age": 20
+        ///       "age": 20,
         ///       "email": "Mike.Andrew@gmail.com"
         ///     }
         /// </remarks>
         [HttpPost("CreateUser")]
         public async Task<IActionResult> CreateUser(CreateUserDTO userDto)
         {
-            var validationResult = ValidateUser(_mapper.Map<UserDTO>(userDto));
+            var validationResult = await ValidateUserAsync(_mapper.Map<UserDTO>(userDto));
 
             if (validationResult == "Ok")
             {
@@ -153,14 +152,14 @@ namespace TestAPI.Controllers
         ///     {        
         ///       "name": "Mike",
         ///       "password": "123456",
-        ///       "age": 20
+        ///       "age": 20,
         ///       "email": "Mike.Andrew@gmail.com"
         ///     }
         /// </remarks>
         [HttpPut]
         public async Task<IActionResult> Update(UpdateUserDTO userDto)
         {
-            var validationResult = ValidateUser(_mapper.Map<UserDTO>(userDto));
+            var validationResult = await ValidateUserAsync(_mapper.Map<UserDTO>(userDto));
 
             if (validationResult == "Ok")
             {
@@ -189,10 +188,11 @@ namespace TestAPI.Controllers
             
         }
 
-        private string ValidateUser(UserDTO userDto) => userDto switch
+        private async Task<string> ValidateUserAsync(UserDTO userDto) => userDto switch
         {
             { Age: <= 0 } => "Age must be greater than zero",
             UserDTO user when !Regex.IsMatch(user.Email, emailPattern) => "Incorrect email",
+            UserDTO user when await _userRepository.IsNotUniqueEmail(user.Email) => "Email already in use",
             UserDTO user when string.IsNullOrWhiteSpace(user.Name) => "Name must contain at least 1 character",
             UserDTO user when user.Password is null || user.Password.Length < 6
                 => "Password must contain at least 6 character",
