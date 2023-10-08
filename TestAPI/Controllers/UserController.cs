@@ -27,18 +27,71 @@ namespace TestAPI.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Gets the page of users.
+        /// </summary>
+        /// <remarks>
+        /// To get the desired page and number of elements, add values to the CurrentPage and PageSize properties:
+        /// 
+        ///     CurrentPage: 1,
+        ///     PageSize: 10
+        ///     
+        /// To sort, add the property name and sort direction.
+        /// To sort in ascending order use ASC, in descending order DESC:
+        /// 
+        ///     OrderBy: "Name ASC"
+        /// 
+        /// To search for each property of the Role and User model, use the searchTerm and PropertyName properties.
+        /// PropertyName - the name of the property that will be searched for. SearchTerm - the string that will be used to search for matches.
+        /// The property name must be capitalized:
+        /// 
+        ///     SearchTerm: "user",
+        ///     PropertyName: "Name"
+        ///
+        /// For the Role model, the property name must be written together with the object name:
+        /// 
+        ///     SearchTerm: "support",
+        ///     PropertyName: "Role.RoleName"
+        /// 
+        /// Example:
+        /// 
+        ///     GET "api/User?CurrentPage=1&amp;PageSize=10&amp;OrderBy=Name%20ASC&amp;SearchTerm=User&amp;PropertyName=Name"
+        /// </remarks>
         [HttpGet]
         public async Task<IActionResult> GetUserPage([FromQuery]RequestParameters parameters)
         {
             return Ok(await _userRepository.GetUserPage(parameters));
         }
 
+        /// <summary>
+        /// Gets user by ID.
+        /// </summary>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(int id)
         {
             return Ok(await _userRepository.GetUserById(id));
         }
 
+        /// <summary>
+        /// Adds a new user.
+        /// </summary>
+        /// <remarks>
+        /// Age should be greater than zero.
+        /// 
+        /// Name should contain at least 1 character.
+        /// 
+        /// Password should contain at least 6 character.
+        /// 
+        /// For example:
+        /// 
+        ///     POST api/User/CreateUser
+        ///     {        
+        ///       "name": "Mike",
+        ///       "password": "123456",
+        ///       "age": 20
+        ///       "email": "Mike.Andrew@gmail.com"
+        ///     }
+        /// </remarks>
         [HttpPost("CreateUser")]
         public async Task<IActionResult> CreateUser(CreateUserDTO userDto)
         {
@@ -52,6 +105,21 @@ namespace TestAPI.Controllers
             return BadRequest(validationResult);
         }
 
+        /// <summary>
+        /// Adds a new role for the user.
+        /// </summary>
+        /// <remarks>
+        /// To add a role, add the ID of the user to whom you want to add the role and the name of the role.
+        /// Possible roles:"User","Support","Admin",SuperAdmin. Role names should be capitalized.
+        /// 
+        /// For example:
+        /// 
+        ///     POST api/User/AddUserRole
+        ///     {
+        ///       "userId": 3,
+        ///       "roleName": "Support"
+        ///     }
+        /// </remarks>
         [HttpPost("AddUserRole")]
         public async Task<IActionResult> AddUserRole(AddRoleDTO roleDto)
         {
@@ -69,6 +137,26 @@ namespace TestAPI.Controllers
             return Ok(await _roleRepository.AddRoleToUser(roleDto));
         }
 
+        /// <summary>
+        /// Updates the user.
+        /// </summary>
+        /// <remarks>
+        /// Age should be greater than zero.
+        /// 
+        /// Name should contain at least 1 character.
+        /// 
+        /// Password should contain at least 6 character.
+        /// 
+        /// For example:
+        /// 
+        ///     PUT api/User
+        ///     {        
+        ///       "name": "Mike",
+        ///       "password": "123456",
+        ///       "age": 20
+        ///       "email": "Mike.Andrew@gmail.com"
+        ///     }
+        /// </remarks>
         [HttpPut]
         public async Task<IActionResult> Update(UpdateUserDTO userDto)
         {
@@ -83,6 +171,9 @@ namespace TestAPI.Controllers
             return BadRequest(validationResult);
         }
 
+        /// <summary>
+        /// Deletes the user by ID.
+        /// </summary>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

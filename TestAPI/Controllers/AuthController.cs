@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using TestAPI.DTOs;
 using TestAPI.Interfaces;
+using TestAPI.Models;
 
 namespace TestAPI.Controllers
 {
@@ -22,6 +23,18 @@ namespace TestAPI.Controllers
             _userRepository = userRepository;
         }
 
+        /// <summary>
+        /// Verifies the user and gets a Token.
+        /// </summary>
+        /// <remarks>
+        /// Example:
+        /// 
+        ///     POST api/Auth
+        ///     {        
+        ///       "name": "admin",
+        ///       "password": "123456",
+        ///     }
+        /// </remarks>
         [HttpPost]
         public async Task<IActionResult> Login(LoginDTO login)
         {
